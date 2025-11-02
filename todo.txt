@@ -1,0 +1,26 @@
+[] - Add button to expand parameters in Ai Content Generation AiArticleGenerationPage
+[] - Update the logic on keyword Ideas tool save, to merge the new keywords with the previous
+[] - finish the rest of the views (profile, subscription etc)
+[] - add the ability to paste a link to a sitemap for the software to download
+[] - add keywords to My Keyword List Tab
+[] - integrate db and build models
+[] - content Dashboard stat cards should be live updates
+[] - add a section by section editor where we click and get an input to describe changes with settings etc. 
+
+--if a diff code it out (understand)
+
+[] - set up authentication
+[] - set up payment provider (stripe)
+[] - Build the basic article editor page to fetch and display article content
+[] - Link "Previous Posts" on the dashboard to their respective editor pages
+[] - Implement more user-friendly error handling on the frontend
+[] - Enhance loading states with spinners or skeleton loaders
+[] - Write unit tests for API routes and component tests for the frontend
+[] - Create a .env.example file to document required environment variables
+[] - Refactor shared utility functions (e.g., slugify) into a common /lib or /utils directory
+[] - Add pagination for the "Previous Posts" list on the dashboard
+[] - Update README.md with detailed project setup and deployment instructions
+[] - Set up a CI/CD pipeline for automated testing and deployment
+
+nice to have 
+[] - larger long formats such as books etc

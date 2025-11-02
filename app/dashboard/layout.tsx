@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <div className={`${figtree.className} antialiased `}>
-      <div className='h-screen flex flex-col'>
+      <div className='h-screen max-h-screen overflow-clip flex flex-col'>
         <main className='flex flex-col flex-1'>
           <Header />
           <div className='flex flex-1 max-w-screen-2xl mx-auto w-full'>

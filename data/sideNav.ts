@@ -16,15 +16,15 @@ export const applicationItems = [
 export const accountItems = [
   {
     label: 'Subscription',
-    href: '/subscription',
+    href: '/dashboard/subscription',
   },
   {
     label: 'Profile',
-    href: '/profile',
+    href: '/dashboard/profile',
   },
   {
     label: 'Sitemap',
-    href: '/sitemap',
+    href: '/dashboard/sitemap',
   },
   {
     label: 'Sign Out',

@@ -19,3 +19,12 @@ html {
     --foreground: #ededed;
   }
 }
+
+/* Need this to ensure react markdown works as tailwind kicks the styles */
+.markdown > * {
+  all: revert;
+}
+
+.reactMarkdown a {
+  @apply text-purple-700 hover:underline;
+}
