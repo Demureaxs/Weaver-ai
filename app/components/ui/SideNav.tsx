@@ -2,6 +2,7 @@
 import { BotMessageSquare, CalendarCheck, Gauge, icons, Keyboard, ListRestart, UserRound, Map } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useUser } from '@/app/contexts/UserContext';
 
 const applicationItems = [
   {
@@ -31,7 +32,7 @@ const applicationItems = [
   },
 ];
 
-const accountItems = [
+const baseAccountItems = [
   {
     label: 'Subscription',
     href: '/dashboard/subscription',
@@ -47,20 +48,37 @@ const accountItems = [
     href: '/dashboard/sitemap',
     icon: <Map size={14} />,
   },
-  {
-    label: 'Sign Out',
-    href: '/sign-out',
-    icon: <icons.LogOut size={14} />,
-  },
 ];
 
-interface SideNavProps {
-  children?: React.ReactNode;
-  className?: string;
-}
-
-export default function SideNav({ children, className }: SideNavProps) {
+export default function SideNav() {
   const pathname = usePathname();
+  const { user } = useUser();
+
+  const accountItems = user ? [...baseAccountItems, { label: 'Sign Out', href: '/sign-out', icon: <icons.LogOut size={14} /> }] : baseAccountItems;
+
+  // Combine all navigation items for a single best match calculation
+  const allNavItems = [...applicationItems, ...accountItems];
+
+  let bestMatchHref = '';
+  let longestMatchLength = 0;
+
+  // First pass: find exact match
+  allNavItems.forEach((item) => {
+    if (pathname === item.href) {
+      bestMatchHref = item.href;
+      longestMatchLength = item.href.length;
+    }
+  });
+
+  // Second pass: if no exact match, find longest startsWith match
+  if (!bestMatchHref) {
+    allNavItems.forEach((item) => {
+      if (pathname.startsWith(item.href) && item.href.length > longestMatchLength) {
+        bestMatchHref = item.href;
+        longestMatchLength = item.href.length;
+      }
+    });
+  }
 
   return (
     <div className='w-[260px] space-y-4 p-6 border-r border-foreground/10 shadow-lg text-sm'>
@@ -70,7 +88,7 @@ export default function SideNav({ children, className }: SideNavProps) {
           <Link
             href={item.href}
             key={index}
-            className={`flex items-center gap-2 ${pathname === item.href && 'bg-primary text-background rounded-lg -ml-2 px-2 py-1'}`}
+            className={`flex items-center gap-2 ${item.href === bestMatchHref && 'bg-primary text-background rounded-lg -ml-2 px-2 py-1'}`}
           >
             {item.icon && <div>{item.icon}</div>}
             <div>{item.label}</div>
@@ -83,7 +101,7 @@ export default function SideNav({ children, className }: SideNavProps) {
           <Link
             href={item.href}
             key={item.href}
-            className={`flex items-center gap-2 ${pathname === item.href && 'bg-primary text-background rounded-lg -ml-2 px-2 py-1'}`}
+            className={`flex items-center gap-2 ${item.href === bestMatchHref && 'bg-primary text-background rounded-lg -ml-2 px-2 py-1'}`}
           >
             {item.icon && <div>{item.icon}</div>}
             <div>{item.label}</div>

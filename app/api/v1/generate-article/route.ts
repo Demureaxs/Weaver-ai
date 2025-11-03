@@ -19,10 +19,26 @@ function slugify(text: string) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { keyword, sections, tone, language, serpAnalysis, hasFaq, minWordsPerSection } = body;
+  const {
+    keyword,
+    sections,
+    tone,
+    language,
+    serpAnalysis,
+    hasFaq,
+    minWordsPerSection,
+    userId,
+    internalLinking,
+    externalLinking,
+  } = body;
 
-  // Create a mega prompt
-  const prompt = `
+  const userSitemap = sitemap.find((s) => s.userId === userId);
+
+  if (internalLinking && !userSitemap) {
+    return NextResponse.json({ message: 'Sitemap not found for user' }, { status: 404 });
+  }
+
+  let prompt = `
     As an expert SEO content writer, please generate a comprehensive, engaging, and plagiarism-free article based on the following parameters.
     Your response should be in markdown format.
 
@@ -32,7 +48,7 @@ export async function POST(req: NextRequest) {
     - The article should be well-structured with a clear introduction, body, and conclusion.
     - It must contain exactly ${sections} sections, each with a relevant heading and aim for at least ${minWordsPerSection} words per section.
     - The tone of the article should be ${tone}.
-    - The article should feature images that match the text for the sections you decide to include images for.
+    - The article should feature images that match the text for the sections you decide to include images for, these images must be sourced from the web and be valid links (include full href).
     - Refrain from use of em dashes; use commas or parentheses instead.
     - Avoid buzzwords and jargon; write in a clear and accessible manner.
     - The language of the article must be ${language}.
@@ -41,17 +57,27 @@ export async function POST(req: NextRequest) {
     - The primary keyword, "${keyword}", should be naturally integrated throughout the article, including in headings where appropriate.
     - The content must be informative, accurate, and provide real value to the reader.
     - Ensure the article is easy to read and flows logically from one section to the next.
+`;
 
+  if (internalLinking && userSitemap) {
+    prompt += `
     **Internal Linking:**
     - Where relevant, please include internal links to the following pages from our sitemap.
     - Do not force links; they should only be included if they provide value to the reader and are contextually appropriate.
     - Here are the available pages for internal linking:
-      ${sitemap.services.map((service) => `- [${service.title}](${service.url})`).join('\n      ')}
+      ${userSitemap.services.map((service) => `- [${service.title}](${service.url})`).join('\n      ')}
+`;
+  }
 
+  if (externalLinking) {
+    prompt += `
     **External Linking:**
     - Include links to authoritative external sources to back up any claims or data presented in the article.
     - Ensure that external links use appropriate anchor text.
+`;
+  }
 
+  prompt += `
     **Advanced Options:**
     - **SERP Analysis:** ${
       serpAnalysis

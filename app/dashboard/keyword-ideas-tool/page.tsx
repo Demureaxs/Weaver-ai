@@ -3,6 +3,7 @@
 import Button from '@/app/components/ui/Button';
 import { FilePlus2, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useUser } from '../../contexts/UserContext';
 
 // --- Define the structure for our categorized results ---
 interface SuggestionCategories {
@@ -56,6 +57,8 @@ export default function KeywordIdeasToolPage() {
   const [keyword, setKeyword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
+  const { user } = useUser();
+
   // const [showKeywords, setShowKeywords] = useState(false); // This is no longer needed
 
   // --- Updated State: Holds the categorized object or null ---
@@ -113,10 +116,11 @@ export default function KeywordIdeasToolPage() {
   // On KeywordIdeasToolPage.tsx
 
   async function saveKeywordsToDashboard(e: React.MouseEvent) {
-    await fetch('/api/v1/save-keywords', {
+    if (!user) return;
+    await fetch('/api/v1/keywords', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ keywords: selectedKeywords }),
+      body: JSON.stringify({ keywords: selectedKeywords, userId: user.id }),
     });
 
     // Optionally, navigate to the dashboard
