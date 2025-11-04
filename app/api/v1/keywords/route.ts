@@ -40,27 +40,38 @@ export async function GET(request: Request) {
 // POST handler to create new keywords
 export async function POST(req: NextRequest) {
   try {
-    const { keywords: newKeywordStrings, userId } = await req.json();
+    const body = await req.json();
+    const { userId } = body;
+    let newKeywordStrings: string[] = [];
 
-    if (!newKeywordStrings || !Array.isArray(newKeywordStrings) || !userId) {
-      return NextResponse.json({ message: 'Invalid request body' }, { status: 400 });
+    if (body.keyword) {
+      newKeywordStrings = [body.keyword];
+    } else if (body.keywords && Array.isArray(body.keywords)) {
+      newKeywordStrings = body.keywords;
+    } else {
+      return NextResponse.json({ message: 'Invalid request body: keyword or keywords array is required' }, { status: 400 });
+    }
+
+    if (!userId) {
+      return NextResponse.json({ message: 'Invalid request body: userId is required' }, { status: 400 });
     }
 
     const existingKeywords = await getKeywords();
 
     const maxId = existingKeywords.reduce((max: number, kw: { id: number }) => (kw.id > max ? kw.id : max), 0);
 
-    const newKeywords = newKeywordStrings.map((text, index) => ({
+    const keywordsToAdd = newKeywordStrings.map((text, index) => ({
       id: maxId + 1 + index,
       text,
       userId,
+      createdAt: new Date().toISOString(),
     }));
 
-    const updatedKeywords = [...existingKeywords, ...newKeywords];
+    const updatedKeywords = [...existingKeywords, ...keywordsToAdd];
 
     await fs.writeFile(keywordsFilePath, JSON.stringify(updatedKeywords, null, 2));
 
-    return NextResponse.json({ message: 'Keywords saved successfully' }, { status: 201 });
+    return NextResponse.json(keywordsToAdd.length === 1 ? keywordsToAdd[0] : keywordsToAdd, { status: 201 });
   } catch (error) {
     console.error('Error saving keywords:', error);
     return NextResponse.json({ message: 'Error saving keywords' }, { status: 500 });

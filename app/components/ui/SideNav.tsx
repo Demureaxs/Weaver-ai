@@ -83,12 +83,12 @@ export default function SideNav() {
   return (
     <div className='w-[260px] space-y-4 p-6 border-r border-foreground/10 shadow-lg text-sm'>
       <h1 className='text-foreground/50'>Application</h1>
-      <ul className='space-y-2 ml-2'>
+      <ul className='space-y-1 ml-2'>
         {applicationItems.map((item, index) => (
           <Link
             href={item.href}
             key={index}
-            className={`flex items-center gap-2 ${item.href === bestMatchHref && 'bg-primary text-background rounded-lg -ml-2 px-2 py-1'}`}
+            className={`flex items-center gap-2 py-1 ${item.href === bestMatchHref && 'bg-primary text-background rounded-lg px-2 -ml-2'}`}
           >
             {item.icon && <div>{item.icon}</div>}
             <div>{item.label}</div>
@@ -96,12 +96,12 @@ export default function SideNav() {
         ))}
       </ul>
       <h1 className='text-foreground/50'>My Account</h1>
-      <ul className='space-y-2 ml-2'>
+      <ul className='space-y-1 ml-2'>
         {accountItems.map((item) => (
           <Link
             href={item.href}
             key={item.href}
-            className={`flex items-center gap-2 ${item.href === bestMatchHref && 'bg-primary text-background rounded-lg -ml-2 px-2 py-1'}`}
+            className={`flex items-center gap-2 py-1 ${item.href === bestMatchHref && 'bg-primary text-background rounded-lg px-2 -ml-2 '}`}
           >
             {item.icon && <div>{item.icon}</div>}
             <div>{item.label}</div>

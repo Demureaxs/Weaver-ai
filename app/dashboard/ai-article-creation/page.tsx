@@ -24,7 +24,7 @@ export default function AiArticleGenerationPage() {
   const [minWordsPerSection, setMinWordsPerSection] = useState(300);
   const [generatedArticleUuid, setGeneratedArticleUuid] = useState<string | null>(null);
   const [hasUserSitemap, setHasUserSitemap] = useState(false);
-  const { user } = useUser();
+  const { user, updateUser } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -47,6 +47,11 @@ export default function AiArticleGenerationPage() {
   }, [user]);
 
   const handleSubmit = async () => {
+    if (user && user.credits < 5) {
+      alert("You don't have enough credits to generate an article.");
+      return;
+    }
+
     setIsLoading(true);
     setResult('');
     setGeneratedArticleUuid(null); // Reset UUID on new generation
@@ -80,6 +85,9 @@ export default function AiArticleGenerationPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
+        if (response.status === 403) {
+          alert(errorData.message);
+        }
         throw new Error(errorData.message || 'Something went wrong');
       }
 
@@ -115,6 +123,10 @@ export default function AiArticleGenerationPage() {
           router.refresh(); // Re-fetch data for the current route
           const savedArticle = await saveResponse.json();
           setGeneratedArticleUuid(savedArticle.id); // Correctly use .id instead of .uuid
+          if (user) {
+            const updatedUser = { ...user, credits: user.credits - 5 };
+            updateUser(updatedUser);
+          }
         }
       }
     }
@@ -138,7 +150,7 @@ export default function AiArticleGenerationPage() {
   };
 
   return (
-    <div className='space-y-4'>
+    <div className='space-y-4 h-full overflow-y-auto'>
       <div className='space-y-2'>
         <h1 className='text-4xl font-semibold'>AI Content Generation</h1>
         <p>Generate and manage your AI-Powered content</p>
@@ -332,13 +344,9 @@ export default function AiArticleGenerationPage() {
             <div className='flex justify-between items-center mb-4'>
               <h2 className='text-2xl font-semibold'>Generated Article</h2>
               {!isLoading && (
-                <div className="flex gap-2">
+                <div className='flex gap-2'>
                   {generatedArticleUuid && (
-                    <Button
-                      onClick={() => router.push(`/dashboard/ai-article-editor/${generatedArticleUuid}`)}
-                    >
-                      Edit Article
-                    </Button>
+                    <Button onClick={() => router.push(`/dashboard/ai-article-editor/${generatedArticleUuid}`)}>Edit Article</Button>
                   )}
                   <Button
                     onClick={handleDownload}

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Button from './Button';
-import { Lock, LockKeyhole, LockOpen } from 'lucide-react';
+import { Lock, LockKeyhole, LockOpen, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@/app/contexts/UserContext';
 
@@ -31,9 +31,21 @@ export default function Header() {
           <div className='flex items-center space-x-2'>
             {user ? (
               <>
-                <span>Welcome, {user.name}!</span>
-                <span>Credits: {user.credits}</span>
-                <Button>Logout</Button>
+                <div className='bg-foreground rounded-full flex items-center justify-center h-8 w-8 text-background'>
+                  {user.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()}
+                </div>
+                <Button
+                  icon={
+                    <LogOut
+                      size={16}
+                      className='bg-primary rounded-full h-8 w-8 p-2 group-hover:bg-foreground transition-all duration-300 ease-in-out -ml-3'
+                    />
+                  }
+                ></Button>
               </>
             ) : (
               <>

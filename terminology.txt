@@ -1,0 +1,53 @@
+
+**Core Concepts:**
+
+*   **React:** A JavaScript library for building user interfaces, primarily for single-page applications. It allows developers to create reusable UI components.
+*   **Next.js:** A React framework for building full-stack web applications. It offers features like server-side rendering (SSR), static site generation (SSG), API routes, and optimized performance.
+*   **Tailwind CSS:** A utility-first CSS framework that allows for rapid UI development by composing classes directly in your HTML/JSX.
+*   **TypeScript:** A superset of JavaScript that adds static type definitions. It helps catch errors early and improves code maintainability, especially in larger projects.
+*   **Full-Stack Development:** The practice of working on both the frontend (client-side) and backend (server-side) of a web application.
+
+**React/Next.js Specifics:**
+
+*   **Component:** Reusable, self-contained building blocks of UI. In React, these are often functional components using hooks.
+*   **Props (Properties):** Data passed from a parent component to a child component to customize its behavior or appearance.
+*   **State:** Data managed within a component that can change over time and cause the component to re-render.
+*   **Hooks (useState, useEffect, useRef, useCallback):** Functions that let you "hook into" React features in functional components.
+    *   **`useState`:** Allows functional components to manage local state.
+    *   **`useEffect`:** Performs side effects (data fetching, DOM manipulation, subscriptions) in functional components.
+    *   **`useRef`:** Accesses DOM elements directly or persists mutable values across renders without causing re-renders.
+    *   **`useCallback`:** Memoizes function definitions to prevent unnecessary re-renders of child components or to stabilize dependencies for other hooks.
+*   **JSX (JavaScript XML):** A syntax extension for JavaScript recommended by React for describing UI. It looks similar to HTML.
+*   **Virtual DOM:** A lightweight, in-memory representation of the actual DOM. React uses it to efficiently update the browser's DOM by comparing the virtual DOM to the real DOM and applying only the necessary changes.
+*   **Client-Side Rendering (CSR):** Rendering the application entirely in the user's browser, typically after an initial minimal HTML page is loaded.
+*   **Server-Side Rendering (SSR):** Rendering a page on the server before sending it to the client. This improves initial load performance and SEO.
+*   **Static Site Generation (SSG):** Generating HTML pages at build time. These pre-built pages are served quickly via a CDN.
+*   **API Routes (Next.js):** Backend endpoints built directly within a Next.js project, allowing you to create server-side logic and handle API requests.
+*   **Context API:** A way to share state or data that can be considered "global" for a tree of React components without having to pass props down manually at every level (prop drilling).
+*   **Prop Drilling:** The process of passing data from a parent component down to deeply nested child components through intermediate components that don't directly need the data.
+
+**Web Development Fundamentals:**
+
+*   **API (Application Programming Interface):** A set of rules and protocols by which different software components communicate with each other.
+*   **REST API:** A common standard for designing networked applications. It uses standard HTTP methods (GET, POST, PUT, DELETE) for operations on resources.
+*   **HTTP Methods (GET, POST, PUT, DELETE):** Standard actions performed on web resources.
+    *   **GET:** Retrieve data.
+    *   **POST:** Send data to create a new resource.
+    *   **PUT:** Send data to update an existing resource (replaces the entire resource).
+    *   **DELETE:** Remove a resource.
+*   **JSON (JavaScript Object Notation):** A lightweight data-interchange format, easy for humans to read and write, and easy for machines to parse and generate.
+*   **DOM (Document Object Model):** A programming interface for HTML and XML documents. It represents the page structure as a tree of objects.
+*   **Asynchronous Operations (async/await, Promises):** Techniques for handling operations that don't complete immediately (e.g., network requests) without blocking the main execution thread.
+*   **Environment Variables:** Variables whose values are set outside the program, typically used to configure applications for different environments (development, production).
+*   **UI/UX (User Interface / User Experience):**
+    *   **UI (User Interface):** The visual elements and interactive properties of a product.
+    *   **UX (User Experience):** The overall experience a user has when interacting with a product.
+*   **Responsive Design:** Designing web applications that provide an optimal viewing and interaction experience across a wide range of devices (desktops, tablets, mobile phones).
+*   **SEO (Search Engine Optimization):** The process of improving the visibility of a website or a web page in a search engine's unpaid results.
+
+**Project-Specific Context:**
+
+*   **Prisma:** An open-source ORM (Object-Relational Mapper) that simplifies database access in TypeScript and Node.js applications. It's used in this project for type-safe database interactions.
+*   **`fs/promises`:** Node.js module for interacting with the file system using Promise-based asynchronous methods. Used in this project for file-based data storage (`keywords.json`, `articles.json`).
+*   **`lucide-react`:** A library providing a set of open-source SVG icons as React components.
+

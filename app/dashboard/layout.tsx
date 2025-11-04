@@ -21,17 +21,15 @@ export default function DashboardLayout({
 
   return (
     <UserProvider user={currentUser}>
-      <div className={`${figtree.className} antialiased `}>
-        <div className='h-screen max-h-screen overflow-clip flex flex-col'>
-          <main className='flex flex-col flex-1'>
-            <Header />
-            <div className='flex flex-1 max-w-screen-2xl mx-auto w-full'>
-              <SideNav />
-              <div className='flex-1 h-[calc(100vh - 54px)] border-r shadow-lg border-foreground/8 p-6'>{children}</div>
-            </div>
-          </main>
-        </div>
-      </div>
+      <div className={`${figtree.className} antialiased h-screen overflow-y-clip flex flex-col`}>
+        <main className='flex flex-col flex-1'>
+          <Header />
+          <div className='flex flex-1 max-w-screen-2xl mx-auto w-full'>
+            <SideNav />
+            <div className='flex flex-col flex-1 h-[calc(100vh-56px)] border-r shadow-lg border-foreground/8 p-6 '>{children}</div>
+          </div>
+        </main>
+      </div>{' '}
     </UserProvider>
   );
 }

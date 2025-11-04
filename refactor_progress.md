@@ -2,21 +2,22 @@
 
 This file tracks the progress of the article management feature implementation.
 
-- [x] **1. Build Full Article API**
-  - [x] Implement `GET` handler (with filtering).
-  - [x] Implement `POST` handler (create new article).
-  - [x] Implement `PUT` handler (update existing article).
-  - [x] Implement `DELETE` handler (remove article).
+- [X] **1. Build Full Article API**
 
-- [x] **2. Update Frontend Components**
-  - [x] Update dashboard page to use the `DELETE` endpoint.
-  - [x] Refactor `ai-article-editor` page to use `GET` and `PUT` endpoints.
+  - [X] Implement `GET` handler (with filtering).
+  - [X] Implement `POST` handler (create new article).
+  - [X] Implement `PUT` handler (update existing article).
+  - [X] Implement `DELETE` handler (remove article).
+- [X] **2. Update Frontend Components**
 
-- [x] **3. Implement "Save & Download" Feature**
-  - [x] Create API endpoint to save article content to a temporary `.md` file.
-  - [x] Create API endpoint to delete the temporary `.md` file.
+  - [X] Update dashboard page to use the `DELETE` endpoint.
+  - [X] Refactor `ai-article-editor` page to use `GET` and `PUT` endpoints.
+- [X] **3. Implement "Save & Download" Feature**
 
-- [ ] **4. Update Download Button Logic**
-  - [ ] Update frontend to call the "prepare download" API.
-  - [ ] Trigger download in the browser.
-  - [ ] Call the "cleanup" API after download is triggered.
+  - [X] Create API endpoint to save article content to a temporary `.md` file.
+  - [X] Create API endpoint to delete the temporary `.md` file.
+- [X] **4. Update Download Button Logic**
+
+  - [X] Update frontend to call the "prepare download" API.
+  - [X] Trigger download in the browser.
+  - [X] Call the "cleanup" API after download is triggered.

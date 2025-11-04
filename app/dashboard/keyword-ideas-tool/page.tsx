@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/app/components/ui/Button';
-import { FilePlus2, Save } from 'lucide-react';
+import { FilePlus2, Save, FileMinus2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useUser } from '../../contexts/UserContext';
 
@@ -14,7 +14,19 @@ interface SuggestionCategories {
 }
 
 // --- NEW: Helper component to render a single, expandable list ---
-const SuggestionCategory = ({ title, list, onAddKeyword }: { title: string; list: string[]; onAddKeyword: (keyword: string) => void }) => {
+const SuggestionCategory = ({
+  title,
+  list,
+  onAddKeyword,
+  onRemoveKeyword,
+  selectedKeywords,
+}: {
+  title: string;
+  list: string[];
+  onAddKeyword: (keyword: string) => void;
+  onRemoveKeyword: (keyword: string) => void;
+  selectedKeywords: string[];
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Don't render the section if the list is empty
@@ -36,17 +48,27 @@ const SuggestionCategory = ({ title, list, onAddKeyword }: { title: string; list
       {isExpanded && (
         // --- UPDATED: Added max-h and overflow-y-auto to make the list scrollable ---
         <ul className='list-inside space-y-3 pt-3 border-t border-foreground/10 overflow-y-auto max-h-96 scrollbar-hide'>
-          {list.map((suggestion, index) => (
-            <li key={index} className='text-foreground flex justify-between items-center group'>
-              <p>{suggestion}</p>
-              <FilePlus2
-                size={16}
-                className='cursor-pointer text-foreground/50 group-hover:text-primary transition-colors'
-                // Pass the suggestion string directly for reliability
-                onClick={() => onAddKeyword(suggestion)}
-              />
-            </li>
-          ))}
+          {list.map((suggestion, index) => {
+            const isSelected = selectedKeywords.includes(suggestion);
+            return (
+              <li key={index} className='text-foreground flex justify-between items-center group'>
+                <p>{suggestion}</p>
+                {isSelected ? (
+                  <FileMinus2
+                    size={16}
+                    className='cursor-pointer text-red-500 group-hover:text-red-700 transition-colors'
+                    onClick={() => onRemoveKeyword(suggestion)}
+                  />
+                ) : (
+                  <FilePlus2
+                    size={16}
+                    className='cursor-pointer text-foreground/50 group-hover:text-primary transition-colors'
+                    onClick={() => onAddKeyword(suggestion)}
+                  />
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
@@ -64,6 +86,19 @@ export default function KeywordIdeasToolPage() {
   // --- Updated State: Holds the categorized object or null ---
   const [suggestions, setSuggestions] = useState<SuggestionCategories | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      fetch(`/api/v1/keywords?userId=${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && Array.isArray(data)) {
+            setSelectedKeywords(data.map((kw: any) => kw.text));
+          }
+        })
+        .catch((err) => console.error('Error fetching existing keywords:', err));
+    }
+  }, [user]);
 
   useEffect(() => {
     // Clear previous suggestions when keyword changes
@@ -106,10 +141,66 @@ export default function KeywordIdeasToolPage() {
     }
   }
 
-  // --- FIXED: Simplified function to accept the keyword string directly ---
-  function handleAddKeyword(keywordToAdd: string) {
-    if (keywordToAdd && !selectedKeywords.includes(keywordToAdd)) {
-      setSelectedKeywords([...selectedKeywords, keywordToAdd]);
+  async function handleAddKeyword(keywordToAdd: string) {
+    if (!user || selectedKeywords.includes(keywordToAdd)) return;
+
+    try {
+      const response = await fetch('/api/v1/keywords', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword: keywordToAdd, userId: user.id }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add keyword');
+      }
+
+      // Assuming the API returns the newly added keyword object
+      const addedKeyword = await response.json();
+      setSelectedKeywords((prev) => [...prev, addedKeyword.text]);
+    } catch (error) {
+      console.error('Error adding keyword:', error);
+      setError('Failed to add keyword.');
+    }
+  }
+
+  async function handleRemoveKeyword(keywordToRemove: string) {
+    if (!user) return;
+
+    try {
+      // Find the keyword ID to delete from the backend
+      // This assumes selectedKeywords might contain objects with IDs, or we need to fetch them.
+      // For now, let's assume we need to fetch the ID or the backend can handle text-based deletion.
+      // Given the current backend DELETE expects an ID, we need to get the ID first.
+      // A simpler approach for now is to just remove from frontend state and rely on saveKeywordsToDashboard for persistence.
+      // However, the request implies immediate backend update.
+
+      // First, let's get the ID of the keyword to remove.
+      const allUserKeywordsRes = await fetch(`/api/v1/keywords?userId=${user.id}`);
+      const allUserKeywords = await allUserKeywordsRes.json();
+      const keywordToDelete = allUserKeywords.find((kw: any) => kw.text === keywordToRemove);
+
+      if (keywordToDelete) {
+        const response = await fetch('/api/v1/keywords', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: keywordToDelete.id }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to remove keyword');
+        }
+
+        setSelectedKeywords((prev) => prev.filter((kw) => kw !== keywordToRemove));
+      } else {
+        console.warn('Keyword not found in backend for deletion:', keywordToRemove);
+        setSelectedKeywords((prev) => prev.filter((kw) => kw !== keywordToRemove));
+      }
+    } catch (error) {
+      console.error('Error removing keyword:', error);
+      setError('Failed to remove keyword.');
     }
   }
 
@@ -117,6 +208,10 @@ export default function KeywordIdeasToolPage() {
 
   async function saveKeywordsToDashboard(e: React.MouseEvent) {
     if (!user) return;
+    // This function now becomes less critical if handleAddKeyword and handleRemoveKeyword update backend directly.
+    // However, if it's meant to be a 'save all changes' button, it needs to send the current selectedKeywords state.
+    // Given the new requirements, this function might be redundant or need re-evaluation.
+    // For now, I'll keep it as is, but it might not be used as frequently.
     await fetch('/api/v1/keywords', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -157,14 +252,14 @@ export default function KeywordIdeasToolPage() {
         <Button onClick={handleSubmit}>{isLoading ? 'Finding...' : 'Find Keyword Ideas'}</Button>
         <div className='flex items-center space-x-2'>
           <aside>{`${selectedKeywords.length} keywords added`}</aside>
-          <Button
+          {/* <Button
             icon={<Save className='-ml-3 p-1 bg-primary rounded-full' />}
             onClick={(e) => {
               e.preventDefault();
               saveKeywordsToDashboard(e);
               setSelectedKeywords([]);
             }}
-          />
+          /> */}
         </div>
       </div>
 
@@ -177,10 +272,34 @@ export default function KeywordIdeasToolPage() {
         {/* --- Render categorized results using the new component --- */}
         {suggestions && (
           <>
-            <SuggestionCategory title='Questions' list={suggestions.questions} onAddKeyword={handleAddKeyword} />
-            <SuggestionCategory title='Prepositions' list={suggestions.prepositions} onAddKeyword={handleAddKeyword} />
-            <SuggestionCategory title='Comparisons' list={suggestions.comparisons} onAddKeyword={handleAddKeyword} />
-            <SuggestionCategory title='Alphabetical' list={suggestions.alphabetical} onAddKeyword={handleAddKeyword} />
+            <SuggestionCategory
+              title='Questions'
+              list={suggestions.questions}
+              onAddKeyword={handleAddKeyword}
+              onRemoveKeyword={handleRemoveKeyword}
+              selectedKeywords={selectedKeywords}
+            />
+            <SuggestionCategory
+              title='Prepositions'
+              list={suggestions.prepositions}
+              onAddKeyword={handleAddKeyword}
+              onRemoveKeyword={handleRemoveKeyword}
+              selectedKeywords={selectedKeywords}
+            />
+            <SuggestionCategory
+              title='Comparisons'
+              list={suggestions.comparisons}
+              onAddKeyword={handleAddKeyword}
+              onRemoveKeyword={handleRemoveKeyword}
+              selectedKeywords={selectedKeywords}
+            />
+            <SuggestionCategory
+              title='Alphabetical'
+              list={suggestions.alphabetical}
+              onAddKeyword={handleAddKeyword}
+              onRemoveKeyword={handleRemoveKeyword}
+              selectedKeywords={selectedKeywords}
+            />
           </>
         )}
       </div>

@@ -1,42 +1,128 @@
 [
   {
-    "id": 1,
-    "text": "who francesca bridgerton marry",
-    "userId": 1
-  },
-  {
     "id": 3,
     "text": "france vs vs portugal 2",
-    "userId": 2
+    "userId": 2,
+    "createdAt": "2025-11-03T12:00:00.000Z"
   },
   {
     "id": 5,
     "text": "who's italy's prime minister",
-    "userId": 2
+    "userId": 2,
+    "createdAt": "2025-11-03T12:00:00.000Z"
   },
   {
     "id": 6,
     "text": "is bollinger better than dom perignon",
-    "userId": 2
+    "userId": 2,
+    "createdAt": "2025-11-03T12:00:00.000Z"
   },
   {
     "id": 7,
     "text": "is bollinger better than laurent perrier",
-    "userId": 2
+    "userId": 2,
+    "createdAt": "2025-11-03T12:00:00.000Z"
   },
   {
     "id": 8,
     "text": "is bollinger better than veuve clicquot",
-    "userId": 2
-  },
-  {
-    "id": 10,
-    "text": "was sweden under german occupation",
-    "userId": 1
+    "userId": 2,
+    "createdAt": "2025-11-03T12:00:00.000Z"
   },
   {
     "id": 11,
     "text": "german occupation of uk",
-    "userId": 1
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 12,
+    "text": "who francesca bridgerton end up with",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 13,
+    "text": "how long to see results from seo",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 14,
+    "text": "how often does seo need to be done",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 15,
+    "text": "how long does seo keyword research take",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 16,
+    "text": "how much does search engine optimisation cost",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 17,
+    "text": "how long does keyword research take",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 18,
+    "text": "how often does seo need to be done",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 19,
+    "text": "how often is google search update",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 20,
+    "text": "who's francesca eastwood",
+    "userId": 1,
+    "createdAt": "2025-11-03T12:00:00.000Z"
+  },
+  {
+    "id": 21,
+    "text": "who football today",
+    "userId": 1,
+    "createdAt": "2025-11-03T22:22:14.355Z"
+  },
+  {
+    "id": 22,
+    "text": "who football game today",
+    "userId": 1,
+    "createdAt": "2025-11-03T22:22:16.454Z"
+  },
+  {
+    "id": 24,
+    "text": "what football is on today uk",
+    "userId": 1,
+    "createdAt": "2025-11-03T22:22:20.608Z"
+  },
+  {
+    "id": 25,
+    "text": "what websites accept paypal",
+    "userId": 1,
+    "createdAt": "2025-11-04T00:00:49.605Z"
+  },
+  {
+    "id": 26,
+    "text": "why website loading slow",
+    "userId": 1,
+    "createdAt": "2025-11-04T00:01:03.285Z"
+  },
+  {
+    "id": 27,
+    "text": "what are the current trends in website design",
+    "userId": 1,
+    "createdAt": "2025-11-04T00:19:40.590Z"
   }
 ]

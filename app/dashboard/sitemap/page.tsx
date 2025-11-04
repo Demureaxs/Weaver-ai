@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useUser } from '@/app/contexts/UserContext';
+import Button from '@/app/components/ui/Button';
 
 interface ServicePage {
   title: string;
@@ -110,14 +111,27 @@ const SitemapPage = () => {
   };
 
   return (
-    <div className='p-6'>
-      <h1 className='text-2xl font-bold mb-4'>Sitemap Internal Linking</h1>
-      <div className='bg-white p-6 rounded-lg shadow-md mb-6'>
+    <div className='space-y-4'>
+      <div className='space-y-2'>
+        <h1 className='text-4xl font-bold'>Sitemap Internal Linking</h1>
+        <p> Manage your sitemap for internal linking </p>
+      </div>
+      <div className='bg-white space-y-4 p-4 rounded-lg shadow-md'>
         <h2 className='text-xl font-semibold mb-4'>Upload Sitemap</h2>
         <div className='flex items-center space-x-4'>
-          <input type='file' onChange={handleFileChange} className='border rounded-lg p-2' />
+          <input
+            type='file'
+            onChange={handleFileChange}
+            className='bg-white border border-foreground/10 p-2 outline-primary shadow rounded w-full text-gray-700 focus:outline-primary focus:shadow-outline'
+          />
           <span className='text-gray-500'>or</span>
-          <input type='text' placeholder='Enter sitemap URL' value={sitemapUrl} onChange={handleUrlChange} className='border rounded-lg p-2 w-full' />
+          <input
+            type='text'
+            placeholder='Enter sitemap URL'
+            value={sitemapUrl}
+            onChange={handleUrlChange}
+            className='bg-white border border-foreground/10 p-2 outline-primary shadow rounded w-full text-gray-700 focus:outline-primary focus:shadow-outline'
+          />
         </div>
         <div className='mt-4'>
           <label className='flex items-center'>
@@ -125,16 +139,14 @@ const SitemapPage = () => {
             Omit base URL
           </label>
         </div>
-        <button onClick={handleProcessSitemap} className='mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700' disabled={isLoading}>
-          {isLoading ? 'Processing...' : 'Process Sitemap'}
-        </button>
+        <Button onClick={handleProcessSitemap}>{isLoading ? 'Processing...' : 'Process Sitemap'}</Button>
       </div>
 
       {error && <div className='bg-red-100 text-red-700 p-4 rounded-lg mb-6'>{error}</div>}
       {success && <div className='bg-green-100 text-green-700 p-4 rounded-lg mb-6'>{success}</div>}
 
       {servicePages.length > 0 && (
-        <div className='bg-white p-6 rounded-lg shadow-md'>
+        <div className='bg-white p-6 rounded-lg shadow-md space-y-2'>
           <h2 className='text-xl font-semibold mb-4'>Filtered Service Pages</h2>
           <ul className='space-y-2'>
             {servicePages.map((page, index) => (
@@ -145,9 +157,7 @@ const SitemapPage = () => {
               </li>
             ))}
           </ul>
-          <button onClick={handleSaveSitemap} className='mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700' disabled={isLoading}>
-            {isLoading ? 'Saving...' : 'Save Sitemap'}
-          </button>
+          <Button onClick={handleSaveSitemap}>{isLoading ? 'Saving...' : 'Save Sitemap'}</Button>
         </div>
       )}
     </div>
